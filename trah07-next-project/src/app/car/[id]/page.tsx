@@ -1,5 +1,5 @@
-import prisma from '@/utils/prisma';
-import Link from 'next/link';
+import prisma from '@/utils/prisma'
+import Link from 'next/link'
 
 const fetchCarDetail = async (id: string) => {
   const car = await prisma.car.findUnique({
@@ -10,12 +10,12 @@ const fetchCarDetail = async (id: string) => {
       model: true,
       brand: true,
     },
-  });
-  return car;
-};
+  })
+  return car
+}
 
 const CarDetailPage = async ({ params }: { params: { id: string } }) => {
-  const car = await fetchCarDetail(params.id);
+  const car = await fetchCarDetail(params.id)
 
   return (
     <div>
@@ -23,9 +23,8 @@ const CarDetailPage = async ({ params }: { params: { id: string } }) => {
       <div>{car?.brand.name}</div>
       <div>{car?.model.name}</div>
       <div>{car?.description}</div>
-      Car details
     </div>
-  );
-};
+  )
+}
 
-export default CarDetailPage;
+export default CarDetailPage
