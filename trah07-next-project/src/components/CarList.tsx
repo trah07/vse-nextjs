@@ -1,9 +1,9 @@
-import CarItem from './CarItem'
-import { CarWithDeps } from '@/types/prismaTypes'
+import CarItem from './CarItem';
+import { CarWithDeps } from '@/types/prismaTypes';
 
 type Props = {
-  cars: CarWithDeps[]
-}
+  cars: CarWithDeps[];
+};
 
 const CarList = ({ cars }: Props) => {
   return (
@@ -12,7 +12,7 @@ const CarList = ({ cars }: Props) => {
         <CarItem key={car.id} car={car} />
       ))}
     </div>
-  )
-}
+  );
+};
 
-export default CarList
+export default CarList;
