@@ -1,8 +1,9 @@
 'use server';
 
+import { redirect } from 'next/navigation';
 import prisma from './prisma';
 
-const createCar = async (formData: FormData) => {
+export const createCar = async (formData: FormData) => {
   const modelId = formData.get('modelId')?.toString();
   const brandId = formData.get('brandId')?.toString();
   const description = formData.get('description')?.toString();
@@ -18,6 +19,6 @@ const createCar = async (formData: FormData) => {
       description: description,
     },
   });
-};
 
-export default createCar;
+  redirect('/');
+};

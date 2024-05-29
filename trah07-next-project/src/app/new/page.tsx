@@ -1,19 +1,24 @@
-import NewCarForm from '@/components/NewCarForm';
+import CarList from '@/components/CarList';
 import prisma from '@/utils/prisma';
 
-const fetchBrands = async () => {
-  return prisma.brand.findMany();
+const getCars = async () => {
+  const cars = await prisma.car.findMany({
+    include: {
+      model: true,
+      brand: true,
+    },
+  });
+  return cars;
 };
 
-const fetchModels = async () => {
-  return prisma.carModel.findMany();
+const HomePage = async () => {
+  const cars = await getCars();
+  return (
+    <div>
+      Home Page
+      <CarList cars={cars} />
+    </div>
+  );
 };
 
-const NewCarPage = async () => {
-  const brands = await fetchBrands();
-  const model = await fetchModels();
-
-  return <NewCarForm models={model} brands={brands}></NewCarForm>;
-};
-
-export default NewCarPage;
+export default HomePage;

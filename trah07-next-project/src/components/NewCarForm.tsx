@@ -1,6 +1,6 @@
 'use client';
-import createCar from '@/utils/actions';
-import { CarModel, Brand } from '@prisma/client';
+import { createCar } from '@/utils/actions';
+import { Brand, CarModel } from '@prisma/client';
 import { useMemo, useState } from 'react';
 
 const NewCarForm = ({
@@ -21,30 +21,28 @@ const NewCarForm = ({
       <form action={createCar} className="flex flex-col">
         <select
           name="brandId"
+          required={true}
           id=""
           value={brandId}
           onChange={(e) => {
             setBrandId(e.target.value);
           }}
         >
-          {brands.map((brand) => {
-            return (
-              <option key={brand.id} value={brand.id}>
-                {brand.name}
-              </option>
-            );
-          })}
+          {brands.map((brand) => (
+            <option key={brand.id} value={brand.id}>
+              {brand.name}
+            </option>
+          ))}
         </select>
-        <select name="modelId">
-          {filteredModels.map((model) => {
-            return (
-              <option key={model.id} value={model.id}>
-                {model.name}
-              </option>
-            );
-          })}
+        <select name="modelId" required={true}>
+          {filteredModels.map((model) => (
+            <option key={model.id} value={model.id}>
+              {model.name}
+            </option>
+          ))}
         </select>
-        <input type="text" name="description"></input>
+        <input type="text" name="description" required={true} />
+        <button type="submit">submit</button>
       </form>
     </div>
   );
