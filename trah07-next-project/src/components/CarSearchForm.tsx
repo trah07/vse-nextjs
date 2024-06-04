@@ -106,22 +106,6 @@ const CarSearchForm = ({
             </option>
           ))}
         </select>
-        <input
-          type="number"
-          placeholder="Min Price ($)"
-          value={minPrice !== undefined ? minPrice : ''}
-          onChange={(e) =>
-            setMinPrice(e.target.value ? Number(e.target.value) : undefined)
-          }
-        />
-        <input
-          type="number"
-          placeholder="Max Price ($)"
-          value={maxPrice !== undefined ? maxPrice : ''}
-          onChange={(e) =>
-            setMaxPrice(e.target.value ? Number(e.target.value) : undefined)
-          }
-        />
         <select
           name="color"
           value={color || ''}
@@ -148,13 +132,40 @@ const CarSearchForm = ({
             </option>
           ))}
         </select>
-        <button type="button" onClick={handleSearch}>
+        <input
+          type="number"
+          placeholder="Min Price ($)"
+          value={minPrice !== undefined ? minPrice : ''}
+          onChange={(e) =>
+            setMinPrice(e.target.value ? Number(e.target.value) : undefined)
+          }
+        />
+        <input
+          type="number"
+          placeholder="Max Price ($)"
+          value={maxPrice !== undefined ? maxPrice : ''}
+          onChange={(e) =>
+            setMaxPrice(e.target.value ? Number(e.target.value) : undefined)
+          }
+        />
+        <button
+          type="button"
+          onClick={handleSearch}
+          className="mt-4 px-4 py-2 bg-black text-white rounded"
+        >
           Search
         </button>
       </form>
       {showFilteredCars && (
         <div>
           <h2>Filtered Cars</h2>
+          <ul>
+            {filteredCars.map((brand) => (
+              <li key={brand.id} value={brand.id}>
+                {brand.name}
+              </li>
+            ))}
+          </ul>
           <ul>
             {filteredCars.map((car) => (
               <li key={car.id}>
