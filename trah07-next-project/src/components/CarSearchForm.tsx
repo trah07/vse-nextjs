@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import { Brand, CarModel, Car } from '@prisma/client';
+import CarLoader from './Loading';
 
 const CarSearchForm = ({
   cars,
@@ -20,6 +21,7 @@ const CarSearchForm = ({
   const [color, setColor] = useState<string>('');
   const [year, setYear] = useState<number | undefined>(undefined);
   const [showFilteredCars, setShowFilteredCars] = useState<boolean>(false);
+  const [loading, setLoading] = useState(false);
 
   const locations = Array.from(new Set(cars.map((car) => car.location))).filter(
     Boolean,
@@ -36,19 +38,13 @@ const CarSearchForm = ({
   }, [selectedBrandId, models]);
 
   const getModelNameById = (modelId: string) => {
-    const filteredModel = models.filter(
-      (model) => model.id === selectedModelId,
-    );
-
-    return filteredModel.length > 0 ? filteredModel[0].name : '';
+    const filteredModel = models.find((model) => model.id === modelId);
+    return filteredModel ? filteredModel.name : '';
   };
 
   const getBrandNameById = (brandId: string) => {
-    const filteredBrands = brands.filter(
-      (brand) => brand.id === selectedBrandId,
-    );
-
-    return filteredBrands.length > 0 ? filteredBrands[0].name : '';
+    const filteredBrand = brands.find((brand) => brand.id === brandId);
+    return filteredBrand ? filteredBrand.name : '';
   };
 
   const filteredCars = useMemo(() => {
@@ -76,12 +72,17 @@ const CarSearchForm = ({
   ]);
 
   const handleSearch = () => {
+    setLoading(true);
     setShowFilteredCars(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
   };
 
   return (
     <div>
-      <form className="flex flex-col bg-gray-200 p-2 rounded-xl">
+      <form className="flex flex-col bg-gray-100 p-4 rounded-lg shadow-md">
+        <label className="font-semibold mb-1">Brand</label>
         <select
           name="brandId"
           value={selectedBrandId || ''}
@@ -89,6 +90,7 @@ const CarSearchForm = ({
             setSelectedBrandId(e.target.value);
             setSelectedModelId('');
           }}
+          className="p-2 mb-3 rounded-md border"
         >
           <option value="">Select Brand</option>
           {brands.map((brand) => (
@@ -97,11 +99,14 @@ const CarSearchForm = ({
             </option>
           ))}
         </select>
+
+        <label className="font-semibold mb-1">Model</label>
         <select
           name="modelId"
           value={selectedModelId || ''}
           onChange={(e) => setSelectedModelId(e.target.value)}
           disabled={!selectedBrandId}
+          className="p-2 mb-3 rounded-md border"
         >
           <option value="">Select Model</option>
           {filteredModels.map((model) => (
@@ -110,10 +115,13 @@ const CarSearchForm = ({
             </option>
           ))}
         </select>
+
+        <label className="font-semibold mb-1">Location</label>
         <select
           name="location"
           value={location || ''}
           onChange={(e) => setLocation(e.target.value)}
+          className="p-2 mb-3 rounded-md border"
         >
           <option value="">Select Location</option>
           {locations.map((loc, index) => (
@@ -122,10 +130,13 @@ const CarSearchForm = ({
             </option>
           ))}
         </select>
+
+        <label className="font-semibold mb-1">Color</label>
         <select
           name="color"
           value={color || ''}
           onChange={(e) => setColor(e.target.value)}
+          className="p-2 mb-3 rounded-md border"
         >
           <option value="">Select Color</option>
           {colors.map((col, index) => (
@@ -134,12 +145,15 @@ const CarSearchForm = ({
             </option>
           ))}
         </select>
+
+        <label className="font-semibold mb-1">Year</label>
         <select
           name="year"
           value={year !== undefined ? year : ''}
           onChange={(e) =>
             setYear(e.target.value ? Number(e.target.value) : undefined)
           }
+          className="p-2 mb-3 rounded-md border"
         >
           <option value="">Select Year</option>
           {years.map((yr, index) => (
@@ -148,58 +162,66 @@ const CarSearchForm = ({
             </option>
           ))}
         </select>
-        <div className="flex flex-col">
-          <span className="flex flex-row my-2">
-            <label htmlFor="minPrice" className="my-2 mr-2">
-              Minimum Price in $:{' '}
-            </label>
-            <input
-              type="number"
-              id="minPrice"
-              placeholder="Min Price ($)"
-              value={minPrice !== undefined ? minPrice : ''}
-              onChange={(e) =>
-                setMinPrice(e.target.value ? Number(e.target.value) : undefined)
-              }
-              className="p-2 rounded-md"
-            />
-          </span>
-          <span className="flex flex-row my-2">
-            <label htmlFor="maxPrice" className="my-2 mr-2">
-              Maximum Price in $:{' '}
-            </label>
-            <input
-              type="number"
-              id="maxPrice"
-              placeholder="Max Price ($)"
-              value={maxPrice !== undefined ? maxPrice : ''}
-              onChange={(e) =>
-                setMaxPrice(e.target.value ? Number(e.target.value) : undefined)
-              }
-              className="p-2 rounded-md"
-            />
-          </span>
-        </div>
+
+        <label className="font-semibold mb-1">Minimum Price ($)</label>
+        <input
+          type="number"
+          id="minPrice"
+          placeholder="Min Price ($)"
+          value={minPrice !== undefined ? minPrice : ''}
+          onChange={(e) =>
+            setMinPrice(e.target.value ? Number(e.target.value) : undefined)
+          }
+          className="p-2 mb-3 rounded-md border"
+        />
+
+        <label className="font-semibold mb-1">Maximum Price ($)</label>
+        <input
+          type="number"
+          id="maxPrice"
+          placeholder="Max Price ($)"
+          value={maxPrice !== undefined ? maxPrice : ''}
+          onChange={(e) =>
+            setMaxPrice(e.target.value ? Number(e.target.value) : undefined)
+          }
+          className="p-2 mb-3 rounded-md border"
+        />
+
         <button
           type="button"
           onClick={handleSearch}
-          className="mt-4 px-4 py-2 bg-sky-500 text-white rounded"
+          className="mt-4 px-4 py-2 bg-sky-500 text-white rounded-md hover:bg-sky-700 transition duration-200"
+          disabled={loading}
         >
           Search
         </button>
       </form>
-      {showFilteredCars && (
-        <div>
-          <h2>Filtered Cars</h2>
-          <ul>
+      {loading && <CarLoader />} {/* Show loader while loading */}
+      {showFilteredCars && !loading && (
+        <div className="mt-6">
+          <h2 className="text-xl font-semibold mb-4">Filtered Cars</h2>
+          <ul className="space-y-4">
             {filteredCars.map((car) => (
-              <li key={car.id}>
-                <h3>
+              <li key={car.id} className="p-4 bg-white rounded-lg shadow-md">
+                <h3 className="text-lg font-bold">
                   {getBrandNameById(car.brandId)}{' '}
                   {getModelNameById(car.modelId)}
                 </h3>
-                {car.description} - {car.location} - ${car.price} - {car.color}{' '}
-                - {car.year}
+                <p>
+                  <strong>Description:</strong> {car.description}
+                </p>
+                <p>
+                  <strong>Location:</strong> {car.location}
+                </p>
+                <p>
+                  <strong>Price:</strong> ${car.price}
+                </p>
+                <p>
+                  <strong>Color:</strong> {car.color}
+                </p>
+                <p>
+                  <strong>Year:</strong> {car.year}
+                </p>
               </li>
             ))}
           </ul>

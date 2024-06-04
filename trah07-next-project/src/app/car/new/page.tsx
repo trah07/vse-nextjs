@@ -14,7 +14,7 @@ const NewCarPage = async () => {
   return (
     <div className="w-3/4 mx-auto">
       <h1 className="text-center text-xl font-bold my-2">Add New Car</h1>
-      <div className="bg-gray-200 p-2 rounded-xl">
+      <div>
         <NewCarForm brands={brands} models={models} />
       </div>
       <Link

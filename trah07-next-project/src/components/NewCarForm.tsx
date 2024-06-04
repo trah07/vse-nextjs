@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import BrandAndModelFormFields from './BrandAndModelFormFields';
 import { Brand, CarModel } from '@prisma/client';
+import CarLoader from './Loading';
 
 const NewCarForm = ({
   brands,
@@ -20,11 +21,13 @@ const NewCarForm = ({
   const [year, setYear] = useState<number | undefined>(undefined);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setMessage('');
     setError('');
+    setLoading(true);
 
     const carData = {
       brandId,
@@ -61,11 +64,17 @@ const NewCarForm = ({
     } catch (error) {
       setError('Failed to add car.');
       console.error('Error:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col">
+    <form
+      onSubmit={handleSubmit}
+      className="flex flex-col bg-gray-100 p-4 rounded-lg shadow-md"
+    >
+      {loading && <CarLoader />} {/* Show loader while loading */}
       <BrandAndModelFormFields
         models={models}
         brands={brands}
@@ -77,14 +86,16 @@ const NewCarForm = ({
         placeholder="Description"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
-        required={true}
+        required
+        className="p-2 mb-3 rounded-md border"
       />
       <input
         type="text"
         placeholder="Location"
         value={location}
         onChange={(e) => setLocation(e.target.value)}
-        required={true}
+        required
+        className="p-2 mb-3 rounded-md border"
       />
       <input
         type="number"
@@ -93,14 +104,16 @@ const NewCarForm = ({
         onChange={(e) =>
           setPrice(e.target.value ? Number(e.target.value) : undefined)
         }
-        required={true}
+        required
+        className="p-2 mb-3 rounded-md border"
       />
       <input
         type="text"
         placeholder="Color"
         value={color}
         onChange={(e) => setColor(e.target.value)}
-        required={true}
+        required
+        className="p-2 mb-3 rounded-md border"
       />
       <input
         type="number"
@@ -109,16 +122,18 @@ const NewCarForm = ({
         onChange={(e) =>
           setYear(e.target.value ? Number(e.target.value) : undefined)
         }
-        required={true}
+        required
+        className="p-2 mb-3 rounded-md border"
       />
       <button
         type="submit"
-        className="mt-4 px-4 py-2  bg-sky-500 text-white rounded"
+        className="mt-4 px-4 py-2 bg-sky-500 text-white rounded-md hover:bg-sky-700 transition duration-200"
+        disabled={loading}
       >
         Add New Car
       </button>
-      {message && <p className="text-green-500">{message}</p>}
-      {error && <p className="text-red-500">{error}</p>}
+      {message && <p className="text-green-500 mt-3">{message}</p>}
+      {error && <p className="text-red-500 mt-3">{error}</p>}
     </form>
   );
 };

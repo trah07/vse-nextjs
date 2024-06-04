@@ -27,12 +27,13 @@ const BrandAndModelFormFields = ({
 
   return (
     <Fragment>
+      <label className="font-semibold mb-1">Brand</label>
       <select
         name="brandId"
         required={true}
         value={brandId}
         onChange={handleBrandChange}
-        className="bg-gray-200 p-2"
+        className="p-2 mb-3 rounded-md border"
       >
         <option value="">Select Brand</option>
         {brands.map((brand) => (
@@ -41,11 +42,14 @@ const BrandAndModelFormFields = ({
           </option>
         ))}
       </select>
+
+      <label className="font-semibold mb-1">Model</label>
       <select
         name="modelId"
         required={true}
         disabled={!brandId}
         onChange={(e) => onModelChange(e.target.value)}
+        className="p-2 mb-3 rounded-md border"
       >
         <option value="">Select Model</option>
         {filteredModels.map((model) => (
