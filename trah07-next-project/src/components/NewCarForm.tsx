@@ -1,10 +1,18 @@
 'use client';
 
 import { useState } from 'react';
+import BrandAndModelFormFields from './BrandAndModelFormFields';
+import { Brand, CarModel } from '@prisma/client';
 
-const NewCarForm = () => {
-  const [brandName, setBrandName] = useState('');
-  const [modelName, setModelName] = useState('');
+const NewCarForm = ({
+  brands,
+  models,
+}: {
+  brands: Brand[];
+  models: CarModel[];
+}) => {
+  const [brandId, setBrandId] = useState('');
+  const [modelId, setModelId] = useState('');
   const [description, setDescription] = useState('');
   const [location, setLocation] = useState('');
   const [price, setPrice] = useState<number | undefined>(undefined);
@@ -19,8 +27,8 @@ const NewCarForm = () => {
     setError('');
 
     const carData = {
-      brandName,
-      modelName,
+      brandId,
+      modelId,
       description,
       location,
       price,
@@ -39,8 +47,8 @@ const NewCarForm = () => {
 
       if (response.ok) {
         setMessage('Car added successfully!');
-        setBrandName('');
-        setModelName('');
+        setBrandId('');
+        setModelId('');
         setDescription('');
         setLocation('');
         setPrice(undefined);
@@ -58,33 +66,25 @@ const NewCarForm = () => {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col">
-      <input
-        type="text"
-        placeholder="Brand Name"
-        value={brandName}
-        onChange={(e) => setBrandName(e.target.value)}
-        required
-      />
-      <input
-        type="text"
-        placeholder="Model Name"
-        value={modelName}
-        onChange={(e) => setModelName(e.target.value)}
-        required
+      <BrandAndModelFormFields
+        models={models}
+        brands={brands}
+        onBrandChange={setBrandId}
+        onModelChange={setModelId}
       />
       <input
         type="text"
         placeholder="Description"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
-        required
+        required={true}
       />
       <input
         type="text"
         placeholder="Location"
         value={location}
         onChange={(e) => setLocation(e.target.value)}
-        required
+        required={true}
       />
       <input
         type="number"
@@ -93,14 +93,14 @@ const NewCarForm = () => {
         onChange={(e) =>
           setPrice(e.target.value ? Number(e.target.value) : undefined)
         }
-        required
+        required={true}
       />
       <input
         type="text"
         placeholder="Color"
         value={color}
         onChange={(e) => setColor(e.target.value)}
-        required
+        required={true}
       />
       <input
         type="number"
@@ -109,13 +109,13 @@ const NewCarForm = () => {
         onChange={(e) =>
           setYear(e.target.value ? Number(e.target.value) : undefined)
         }
-        required
+        required={true}
       />
       <button
         type="submit"
         className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
       >
-        Add Car
+        Add New Car
       </button>
       {message && <p className="text-green-500">{message}</p>}
       {error && <p className="text-red-500">{error}</p>}

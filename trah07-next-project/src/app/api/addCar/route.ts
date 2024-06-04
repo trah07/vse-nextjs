@@ -4,27 +4,33 @@ import prisma from '@/utils/prisma';
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { brandName, modelName, ...rest } = body;
+    const { brandId, modelId, description, location, price, color, year } =
+      body;
 
-    let brand = await prisma.brand.findUnique({ where: { name: brandName } });
-    if (!brand) {
-      brand = await prisma.brand.create({ data: { name: brandName } });
-    }
-
-    let model = await prisma.carModel.findUnique({
-      where: { name: modelName },
-    });
-    if (!model) {
-      model = await prisma.carModel.create({
-        data: { name: modelName, brandId: brand.id },
-      });
+    if (
+      !brandId ||
+      !modelId ||
+      !description ||
+      !location ||
+      !price ||
+      !color ||
+      !year
+    ) {
+      return NextResponse.json(
+        { error: 'All fields are required' },
+        { status: 400 },
+      );
     }
 
     const newCar = await prisma.car.create({
       data: {
-        ...rest,
-        brandId: brand.id,
-        modelId: model.id,
+        brandId,
+        modelId,
+        description,
+        location,
+        price,
+        color,
+        year,
       },
     });
 
