@@ -27,7 +27,7 @@ const BrandAndModelFormFields = ({
           setBrandId(e.target.value);
         }}
       >
-        <option value="">Select Brand</option>
+        <option value="">Input Brand</option>
         {brands.map((brand) => (
           <option key={brand.id} value={brand.id}>
             {brand.name}
@@ -35,7 +35,7 @@ const BrandAndModelFormFields = ({
         ))}
       </select>
       <select name="modelId" required={true} disabled={!brandId}>
-        <option value="">Select Model</option>
+        <option value="">Input Model</option>
         {filteredModels.map((model) => (
           <option key={model.id} value={model.id}>
             {model.name}

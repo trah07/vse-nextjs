@@ -1,24 +1,10 @@
 import NewCarForm from '@/components/NewCarForm';
-import prisma from '@/utils/prisma';
 
-const fetchBrands = async () => {
-  const brands = await prisma.brand.findMany();
-  return brands;
-};
-
-const fetchModels = async () => {
-  const models = await prisma.carModel.findMany();
-  return models;
-};
-
-const NewCarPage = async () => {
-  const brands = await fetchBrands();
-  const models = await fetchModels();
-
+const NewCarPage = () => {
   return (
     <div>
-      New Car
-      <NewCarForm brands={brands} models={models} />
+      <h1>Add New Car</h1>
+      <NewCarForm />
     </div>
   );
 };
