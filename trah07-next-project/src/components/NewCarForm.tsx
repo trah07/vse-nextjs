@@ -74,7 +74,6 @@ const NewCarForm = ({
       onSubmit={handleSubmit}
       className="flex flex-col bg-gray-100 p-4 rounded-lg shadow-md"
     >
-      {loading && <CarLoader />} {/* Show loader while loading */}
       <BrandAndModelFormFields
         models={models}
         brands={brands}
@@ -134,6 +133,7 @@ const NewCarForm = ({
       </button>
       {message && <p className="text-green-500 mt-3">{message}</p>}
       {error && <p className="text-red-500 mt-3">{error}</p>}
+      {loading && <CarLoader />}
     </form>
   );
 };
