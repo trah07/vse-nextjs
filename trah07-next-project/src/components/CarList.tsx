@@ -7,7 +7,7 @@ type Props = {
 
 const CarList = ({ cars }: Props) => {
   return (
-    <div>
+    <div className=" bg-gray-300 rounded-xl p-8 flex flex-col flex-wrap">
       {cars.map((car) => (
         <CarItem key={car.id} car={car} />
       ))}

@@ -35,6 +35,22 @@ const CarSearchForm = ({
     return models.filter((model) => model.brandId === selectedBrandId);
   }, [selectedBrandId, models]);
 
+  const getModelNameById = (modelId: string) => {
+    const filteredModel = models.filter(
+      (model) => model.id === selectedModelId,
+    );
+
+    return filteredModel.length > 0 ? filteredModel[0].name : '';
+  };
+
+  const getBrandNameById = (brandId: string) => {
+    const filteredBrands = brands.filter(
+      (brand) => brand.id === selectedBrandId,
+    );
+
+    return filteredBrands.length > 0 ? filteredBrands[0].name : '';
+  };
+
   const filteredCars = useMemo(() => {
     return cars.filter(
       (car) =>
@@ -65,13 +81,13 @@ const CarSearchForm = ({
 
   return (
     <div>
-      <form className="flex flex-col">
+      <form className="flex flex-col bg-gray-200 p-2 rounded-xl">
         <select
           name="brandId"
           value={selectedBrandId || ''}
           onChange={(e) => {
             setSelectedBrandId(e.target.value);
-            setSelectedModelId(''); // Reset model selection when brand changes
+            setSelectedModelId('');
           }}
         >
           <option value="">Select Brand</option>
@@ -132,26 +148,42 @@ const CarSearchForm = ({
             </option>
           ))}
         </select>
-        <input
-          type="number"
-          placeholder="Min Price ($)"
-          value={minPrice !== undefined ? minPrice : ''}
-          onChange={(e) =>
-            setMinPrice(e.target.value ? Number(e.target.value) : undefined)
-          }
-        />
-        <input
-          type="number"
-          placeholder="Max Price ($)"
-          value={maxPrice !== undefined ? maxPrice : ''}
-          onChange={(e) =>
-            setMaxPrice(e.target.value ? Number(e.target.value) : undefined)
-          }
-        />
+        <div className="flex flex-col">
+          <span className="flex flex-row my-2">
+            <label htmlFor="minPrice" className="my-2 mr-2">
+              Minimum Price in $:{' '}
+            </label>
+            <input
+              type="number"
+              id="minPrice"
+              placeholder="Min Price ($)"
+              value={minPrice !== undefined ? minPrice : ''}
+              onChange={(e) =>
+                setMinPrice(e.target.value ? Number(e.target.value) : undefined)
+              }
+              className="p-2 rounded-md"
+            />
+          </span>
+          <span className="flex flex-row my-2">
+            <label htmlFor="maxPrice" className="my-2 mr-2">
+              Maximum Price in $:{' '}
+            </label>
+            <input
+              type="number"
+              id="maxPrice"
+              placeholder="Max Price ($)"
+              value={maxPrice !== undefined ? maxPrice : ''}
+              onChange={(e) =>
+                setMaxPrice(e.target.value ? Number(e.target.value) : undefined)
+              }
+              className="p-2 rounded-md"
+            />
+          </span>
+        </div>
         <button
           type="button"
           onClick={handleSearch}
-          className="mt-4 px-4 py-2 bg-black text-white rounded"
+          className="mt-4 px-4 py-2 bg-sky-500 text-white rounded"
         >
           Search
         </button>
@@ -160,15 +192,12 @@ const CarSearchForm = ({
         <div>
           <h2>Filtered Cars</h2>
           <ul>
-            {filteredCars.map((brand) => (
-              <li key={brand.id} value={brand.id}>
-                {brand.name}
-              </li>
-            ))}
-          </ul>
-          <ul>
             {filteredCars.map((car) => (
               <li key={car.id}>
+                <h3>
+                  {getBrandNameById(car.brandId)}{' '}
+                  {getModelNameById(car.modelId)}
+                </h3>
                 {car.description} - {car.location} - ${car.price} - {car.color}{' '}
                 - {car.year}
               </li>

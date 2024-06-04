@@ -12,13 +12,16 @@ const NewCarPage = async () => {
   const { brands, models } = await fetchBrandsAndModels();
 
   return (
-    <div>
-      <h1>Add New Car</h1>
-      <NewCarForm brands={brands} models={models} />
-      <Link href="/">
-        <button className="mt-4 px-4 py-2 bg-gray-500 text-white rounded">
-          Go Back to Homepage
-        </button>
+    <div className="w-3/4 mx-auto">
+      <h1 className="text-center text-xl font-bold my-2">Add New Car</h1>
+      <div className="bg-gray-200 p-2 rounded-xl">
+        <NewCarForm brands={brands} models={models} />
+      </div>
+      <Link
+        href="/"
+        className="mt-4 px-4 py-2 bg-black text-white rounded block w-32 text-center"
+      >
+        Go Back
       </Link>
     </div>
   );

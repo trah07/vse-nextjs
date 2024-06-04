@@ -32,6 +32,7 @@ const BrandAndModelFormFields = ({
         required={true}
         value={brandId}
         onChange={handleBrandChange}
+        className="bg-gray-200 p-2"
       >
         <option value="">Select Brand</option>
         {brands.map((brand) => (
