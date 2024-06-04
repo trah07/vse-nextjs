@@ -1,24 +1,25 @@
 import NewCarForm from '@/components/NewCarForm';
 import prisma from '@/utils/prisma';
+import Link from 'next/link';
 
-const fetchBrands = async () => {
+const fetchBrandsAndModels = async () => {
   const brands = await prisma.brand.findMany();
-  return brands;
-};
-
-const fetchModels = async () => {
   const models = await prisma.carModel.findMany();
-  return models;
+  return { brands, models };
 };
 
 const NewCarPage = async () => {
-  const brands = await fetchBrands();
-  const models = await fetchModels();
+  const { brands, models } = await fetchBrandsAndModels();
 
   return (
     <div>
-      New Car
+      <h1>Add New Car</h1>
       <NewCarForm brands={brands} models={models} />
+      <Link href="/">
+        <button className="mt-4 px-4 py-2 bg-gray-500 text-white rounded">
+          Go Back to Homepage
+        </button>
+      </Link>
     </div>
   );
 };
