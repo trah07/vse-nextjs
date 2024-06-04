@@ -11,9 +11,12 @@ const NewCarForm = () => {
   const [color, setColor] = useState('');
   const [year, setYear] = useState<number | undefined>(undefined);
   const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setMessage('');
+    setError('');
 
     const carData = {
       brandName,
@@ -25,25 +28,31 @@ const NewCarForm = () => {
       year,
     };
 
-    const response = await fetch('/api/addCar', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(carData),
-    });
+    try {
+      const response = await fetch('/api/addCar', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(carData),
+      });
 
-    if (response.ok) {
-      setMessage('Car added successfully!');
-      setBrandName('');
-      setModelName('');
-      setDescription('');
-      setLocation('');
-      setPrice(undefined);
-      setColor('');
-      setYear(undefined);
-    } else {
-      setMessage('Failed to add car.');
+      if (response.ok) {
+        setMessage('Car added successfully!');
+        setBrandName('');
+        setModelName('');
+        setDescription('');
+        setLocation('');
+        setPrice(undefined);
+        setColor('');
+        setYear(undefined);
+      } else {
+        const errorData = await response.json();
+        setError(errorData.error || 'Failed to add car.');
+      }
+    } catch (error) {
+      setError('Failed to add car.');
+      console.error('Error:', error);
     }
   };
 
@@ -102,8 +111,14 @@ const NewCarForm = () => {
         }
         required
       />
-      <button type="submit">Add Car</button>
-      {message && <p>{message}</p>}
+      <button
+        type="submit"
+        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
+      >
+        Add Car
+      </button>
+      {message && <p className="text-green-500">{message}</p>}
+      {error && <p className="text-red-500">{error}</p>}
     </form>
   );
 };
